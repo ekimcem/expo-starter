@@ -1,22 +1,32 @@
 import React from "react";
-import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
+import { TouchableOpacity, Text, StyleSheet, ViewStyle } from "react-native";
+import { useColorScheme } from "react-native";
+import { darkColors, lightColors } from "../constants/Colors";
 
 interface BadgeProps {
   label: string;
   onPress?: () => void;
+  style?: ViewStyle;
 }
 
-const Badge: React.FC<BadgeProps> = ({ label, onPress }) => {
+const Badge: React.FC<BadgeProps> = ({ label, onPress, style }) => {
+  const colorScheme = useColorScheme();
+  const colors = colorScheme === "dark" ? darkColors : lightColors;
+
   return (
-    <TouchableOpacity onPress={onPress} style={styles.container}>
-      <Text style={styles.label}>{label}</Text>
+    <TouchableOpacity
+      onPress={onPress}
+      style={[styles.container, { backgroundColor: colors.secondary }, style]}
+    >
+      <Text style={[styles.label, { color: colors.secondaryForeground }]}>
+        {label}
+      </Text>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: "#e0e0e0",
     borderRadius: 16,
     paddingVertical: 8,
     paddingHorizontal: 12,
@@ -25,7 +35,7 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 14,
-    color: "#333",
+    fontWeight: "bold",
   },
 });
 
