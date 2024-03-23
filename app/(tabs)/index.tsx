@@ -14,8 +14,8 @@ export default function TabOneScreen() {
       data: { session },
       error,
     } = await supabase.auth.signInWithPassword({
-      email: "ekim@bronixengineering.com",
-      password: "123123123",
+      email: "",
+      password: "",
     });
 
     if (error) Alert.alert(error.message);
@@ -23,8 +23,8 @@ export default function TabOneScreen() {
 
   async function signUpWithEmail() {
     const { error } = await supabase.auth.signUp({
-      email: "ekim@bronixengineering.com",
-      password: "123123123",
+      email: "",
+      password: "",
     });
 
     if (error) Alert.alert(error.message);
