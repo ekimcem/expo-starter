@@ -14,6 +14,7 @@ import { lightColors, darkColors } from "@/constants/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AuthProvider } from "@/providers/AuthProvider";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { useLocales } from "expo-localization";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -102,6 +103,7 @@ function RootLayoutNav() {
       ...darkColors,
     },
   };
+
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>

@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "rn-storybook",
-    "slug": "rn-storybook",
+    "name": "bronix-starter-expo",
+    "slug": "bronix-starter-expo",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -12,12 +12,9 @@
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.ekimcem.rn-storybook"
+      "supportsTablet": false
     },
     "android": {
       "adaptiveIcon": {
@@ -30,11 +27,7 @@
       "output": "static",
       "favicon": "./assets/images/favicon.png"
     },
-    "plugins": [
-      "expo-router",
-      "expo-secure-store",
-      "expo-localization"
-    ],
+    "plugins": ["expo-router", "expo-secure-store", "expo-localization"],
     "experiments": {
       "typedRoutes": true
     }
