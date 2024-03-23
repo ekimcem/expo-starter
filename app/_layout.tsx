@@ -105,14 +105,6 @@ function RootLayoutNav() {
   return (
     <AuthProvider>
       <ThemeProvider value={theme == "dark" ? DarkThemeBro : LightThemeBro}>
-        <SafeAreaView>
-          <Button
-            text="asd"
-            onPress={() => {
-              toggleTheme(theme == "dark" ? "light" : "dark");
-            }}
-          ></Button>
-        </SafeAreaView>
         <Stack>
           <Stack.Screen name="index" options={{ headerShown: true }} />
         </Stack>
