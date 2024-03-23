@@ -12,9 +12,8 @@ import { useEffect, createContext, useState } from "react";
 import { useColorScheme } from "react-native";
 import { lightColors, darkColors } from "@/constants/Colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { Button } from "@/components/Button";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { AuthProvider } from "@/providers/AuthProvider";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -55,6 +54,7 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
+  const queryClient = new QueryClient();
   const colorScheme = useColorScheme();
 
   const [theme, setTheme] = useState<string>("light");
@@ -103,12 +103,14 @@ function RootLayoutNav() {
     },
   };
   return (
-    <AuthProvider>
-      <ThemeProvider value={theme == "dark" ? DarkThemeBro : LightThemeBro}>
-        <Stack>
-          <Stack.Screen name="index" options={{ headerShown: true }} />
-        </Stack>
-      </ThemeProvider>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <ThemeProvider value={theme == "dark" ? DarkThemeBro : LightThemeBro}>
+          <Stack>
+            <Stack.Screen name="index" options={{ headerShown: true }} />
+          </Stack>
+        </ThemeProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
