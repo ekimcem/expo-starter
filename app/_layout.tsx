@@ -31,9 +31,6 @@ SplashScreen.preventAutoHideAsync();
 export const ThemeContext = createContext("");
 
 export default function RootLayout() {
-  const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL as string;
-  const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY as string;
-
   const [loaded, error] = useFonts({
     SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
