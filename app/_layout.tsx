@@ -1,28 +1,41 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { Stack } from 'expo-router';
-import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
-
-import { useColorScheme } from '@/components/useColorScheme';
+import FontAwesome from "@expo/vector-icons/FontAwesome";
+import {
+  DefaultTheme,
+  ThemeProvider,
+  DarkTheme,
+  useTheme,
+} from "@react-navigation/native";
+import { useFonts } from "expo-font";
+import { Stack } from "expo-router";
+import * as SplashScreen from "expo-splash-screen";
+import { useEffect, createContext, useState } from "react";
+import { useColorScheme } from "react-native";
+import { lightColors, darkColors } from "@/constants/Colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Button } from "@/components/Button";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { AuthProvider } from "@/providers/AuthProvider";
 
 export {
   // Catch any errors thrown by the Layout component.
   ErrorBoundary,
-} from 'expo-router';
+} from "expo-router";
 
 export const unstable_settings = {
   // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  initialRouteName: "(tabs)",
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
+export const ThemeContext = createContext("");
 
 export default function RootLayout() {
+  const supabaseUrl = process.env.EXPO_PUBLIC_SUPABASE_URL as string;
+  const supabaseKey = process.env.EXPO_PUBLIC_SUPABASE_ANON_KEY as string;
+
   const [loaded, error] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+    SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
     ...FontAwesome.font,
   });
 
@@ -47,12 +60,66 @@ export default function RootLayout() {
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
 
+  const [theme, setTheme] = useState<string>("light");
+
+  useEffect(() => {
+    // Load saved theme from storage
+    const getTheme = async () => {
+      try {
+        const savedTheme = await AsyncStorage.getItem("theme");
+        // If no saved theme, set theme based on system preference
+        if (savedTheme) {
+          setTheme(savedTheme);
+        } else if (savedTheme === null) {
+          if (colorScheme === "dark") {
+            setTheme("dark");
+          } else {
+            setTheme("light");
+          }
+        }
+      } catch (error) {
+        // Error loading theme
+        console.log("Error loading theme:", error);
+      }
+    };
+    getTheme();
+  }, []);
+
+  const toggleTheme = (newTheme: string) => {
+    setTheme(newTheme);
+    // Save selected theme to storage
+    AsyncStorage.setItem("theme", newTheme);
+  };
+
+  const LightThemeBro = {
+    ...DefaultTheme,
+    colors: {
+      ...lightColors,
+    },
+    dark: true,
+  };
+
+  const DarkThemeBro = {
+    ...DarkTheme,
+    colors: {
+      ...darkColors,
+    },
+  };
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-      </Stack>
-    </ThemeProvider>
+    <AuthProvider>
+      <ThemeProvider value={theme == "dark" ? DarkThemeBro : LightThemeBro}>
+        <SafeAreaView>
+          <Button
+            text="asd"
+            onPress={() => {
+              toggleTheme(theme == "dark" ? "light" : "dark");
+            }}
+          ></Button>
+        </SafeAreaView>
+        <Stack>
+          <Stack.Screen name="index" options={{ headerShown: false }} />
+        </Stack>
+      </ThemeProvider>
+    </AuthProvider>
   );
 }
